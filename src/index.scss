@@ -1,1 +1,61 @@
 @import '~bootstrap/scss/bootstrap';
+@font-face {
+  font-family: 'Korinna';
+  src: URL('../KORIN.tff') format('truetype');
+}
+
+
+.category, .question {
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  background: #060CE9;
+  display: flex;
+  // markers centered on main axis
+  justify-content: center;
+  // markers centered on cross axis
+  align-items: center;
+  color: white;
+  font-size: 2.5vh;
+  font-family: Korinna;
+  text-align: center;
+  // add shadow 2px below and to the right
+  text-shadow: 2px 2px rgba(0, 0, 0, .25);
+  min-height: calc(100% / 5);
+  // make sure user cannot select text when clicked on
+  user-select: none;
+  // select the 3 right boxes (3n - every 3rd box)
+  &:nth-child(3n) {
+    border-right: 0;
+  };
+  // (-1n + 3) selects last 3 elements
+  &:nth-last-child(-1n + 3) {
+    border-bottom: 0;
+  }
+}
+
+.question {
+  color: yellow;
+  &:hover {
+    background-color: DarkBlue;
+  }
+  font-size: 4vh;
+}
+
+.game-board {
+  // game-board set to scale to entire height
+  height: 100vh;
+  width: 50%;
+  margin: auto;
+}
+
+.board {
+  // set max size of board to be 100% of viewport's height - 75px
+  max-height: calc(80vh - 75px);
+  max-width: calc(80vw - 75px);
+}
+
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
