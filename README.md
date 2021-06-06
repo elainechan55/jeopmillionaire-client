@@ -35,6 +35,10 @@ Technology    | Front-End | Back-End |
 **Lodash**    | X         | X        |
 
 ## Planning
+### Process
+Throughout the planning process, I utilized a [Trello project board]()
+to help with organization.
+
 ### Wireframes
 * [Wireframes]()
 
@@ -56,4 +60,9 @@ Technology    | Front-End | Back-End |
 
 ## Application-In-Action
 
-## Next Development & Reach Goals
+## Next Development
+### Future Iterations
+- In future versions, I would like to incorporate local multiplayer and networked
+multiplayer.
+-
+### Unsolved Problems
