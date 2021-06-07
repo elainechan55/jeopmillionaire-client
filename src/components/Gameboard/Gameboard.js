@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { gameboardCreate } from '../../api/gameboard'
+import { gameboardCreate, gameboardUpdate, responseCreate } from '../../api/gameboard'
 import CategoryCard from '../CategoryCard/CategoryCard'
 import QuestionCard from '../QuestionCard/QuestionCard'
 const _ = require('lodash')
@@ -17,7 +17,7 @@ class Gameboard extends Component {
 
   onSubmit (event) {
     console.log(event)
-    gameboardCreate(this.state.user)
+    gameboardCreate(this.state.user) // axios request
       .then(res => {
         this.setState({
           isLoaded: true,
@@ -32,8 +32,46 @@ class Gameboard extends Component {
   //   return <CategoryCard value={i} />
   // }
 
-  renderQuestion (q) {
-    return <QuestionCard />
+  // renderQuestion (q) {
+  //   return <QuestionCard />
+  // }
+
+  // updateScore = (number) => {
+  //   this.setState(prevState => {
+  //     const gameboard = Object.assign({}, prevState.gameboard)
+  //     gameboard.totalScore += number
+  //     return { gameboard }
+  //   })
+  //   this.render()
+  // }
+
+  updateGameboard = (question, answer) => {
+    const response = {
+      answer: answer.answerText,
+      game: this.state.gameboard._id,
+      question: question._id,
+      correct: answer.isCorrect
+    }
+    const gameboard = this.state.gameboard
+    if (answer.isCorrect) {
+      gameboard.totalScore += question.score
+    } else {
+      gameboard.totalScore -= question.score
+    }
+
+    responseCreate(response, this.state.user) // axios request
+      .then(res => {
+        gameboard.responses.push(res.data.response)
+        gameboard.responses = gameboard.responses.map(r => r._id)
+        gameboardUpdate(gameboard._id, gameboard, this.state.user) // axios request
+          .then(res => {
+            this.setState({
+              gameboard: res.data.gameboard
+            })
+          })
+          .catch(err => console.error(err))
+      })
+      .catch(err => console.error(err))
   }
 
   render () {
@@ -69,22 +107,23 @@ class Gameboard extends Component {
         //   </div>
         // </div>
         <div className="game-board">
+          <h1>Score: {this.state.gameboard.totalScore}</h1>
           <div className="row h-100 board">
             {categories.map(category => (
-              <CategoryCard key="" value={category} />
+              <CategoryCard key={category} value={category} />
             ))}
 
-            <QuestionCard className="col-4 box" value={this.state.gameboard.questions[0]}></QuestionCard>
-            <QuestionCard className="col-4 box" value={this.state.gameboard.questions[3]}></QuestionCard>
-            <QuestionCard className="col-4 box" value={this.state.gameboard.questions[6]}></QuestionCard>
+            <QuestionCard className="col-4 box" value={this.state.gameboard.questions[0]} updateGameboard={this.updateGameboard}></QuestionCard>
+            <QuestionCard className="col-4 box" value={this.state.gameboard.questions[3]} updateGameboard={this.updateGameboard}></QuestionCard>
+            <QuestionCard className="col-4 box" value={this.state.gameboard.questions[6]} updateGameboard={this.updateGameboard}></QuestionCard>
 
-            <QuestionCard className="col-4 box" value={this.state.gameboard.questions[1]}></QuestionCard>
-            <QuestionCard className="col-4 box" value={this.state.gameboard.questions[4]}></QuestionCard>
-            <QuestionCard className="col-4 box" value={this.state.gameboard.questions[7]}></QuestionCard>
+            <QuestionCard className="col-4 box" value={this.state.gameboard.questions[1]} updateGameboard={this.updateGameboard}></QuestionCard>
+            <QuestionCard className="col-4 box" value={this.state.gameboard.questions[4]} updateGameboard={this.updateGameboard}></QuestionCard>
+            <QuestionCard className="col-4 box" value={this.state.gameboard.questions[7]} updateGameboard={this.updateGameboard}></QuestionCard>
 
-            <QuestionCard className="col-4 box" value={this.state.gameboard.questions[2]}></QuestionCard>
-            <QuestionCard className="col-4 box" value={this.state.gameboard.questions[5]}></QuestionCard>
-            <QuestionCard className="col-4 box" value={this.state.gameboard.questions[8]}></QuestionCard>
+            <QuestionCard className="col-4 box" value={this.state.gameboard.questions[2]} updateGameboard={this.updateGameboard}></QuestionCard>
+            <QuestionCard className="col-4 box" value={this.state.gameboard.questions[5]} updateGameboard={this.updateGameboard}></QuestionCard>
+            <QuestionCard className="col-4 box" value={this.state.gameboard.questions[8]} updateGameboard={this.updateGameboard}></QuestionCard>
           </div>
         </div>
       )
