@@ -21,6 +21,23 @@ export const gameboardUpdate = (id, gameboard, user) => {
   })
 }
 
+// get all gameboards for user - INDEX
+export const gameboardIndex = user => {
+  return axios({
+    url: apiUrl + '/gameboards',
+    method: 'GET',
+    headers: { 'Authorization': `Bearer ${user.token}` }
+  })
+}
+
+export const gameboardShow = (id, user) => {
+  return axios({
+    url: apiUrl + '/gameboards/' + id,
+    method: 'GET',
+    headers: { 'Authorization': `Bearer ${user.token}` }
+  })
+}
+
 /* ~~~~~~~~~~~ RESPONSES ~~~~~~~~~~~ */
 export const responseCreate = (response, user) => {
   return axios({
