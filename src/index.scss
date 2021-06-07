@@ -5,7 +5,7 @@
 }
 
 
-.category, .question {
+.category, .question, .answer {
   border-right: 2px solid black;
   border-bottom: 2px solid black;
   background: #060CE9;
@@ -33,12 +33,17 @@
   }
 }
 
-.question {
+.question, .answer{
   color: yellow;
   &:hover {
     background-color: DarkBlue;
   }
   font-size: 4vh;
+}
+
+.answer {
+  color:white;
+  margin: 5px;
 }
 
 .game-board {
