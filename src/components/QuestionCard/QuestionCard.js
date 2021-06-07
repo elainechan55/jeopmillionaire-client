@@ -11,7 +11,8 @@ class QuestionCard extends Component {
     this.state = {
       question: props.value,
       open: false,
-      isAnswered: false
+      isAnswered: false,
+      gameboard: props.gameboard
     }
     this.updateGameboard = props.updateGameboard
 
@@ -54,11 +55,21 @@ class QuestionCard extends Component {
     this.updateGameboard(this.state.question, clickedAnswer)
   }
 
+  isAnswered = (questionId) => {
+    const result = this.state.gameboard.responses.some(response => {
+      if (response.question) {
+        return response.question[0] === questionId
+      }
+      return this.state.isAnswered
+    })
+    return result
+  }
+
   render () {
     return (
       <Fragment>
         <Card className="col-4 box question" onClick={this.onOpenModal}>
-          {this.state.isAnswered ? '' : this.state.question.score}
+          {this.isAnswered(this.state.question._id) ? '' : this.state.question.score}
         </Card>
         <Modal open={this.state.open} onClose={this.onCloseModal} center>
           <h2>{this.state.question.title}</h2>
