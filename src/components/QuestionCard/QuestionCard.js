@@ -53,6 +53,9 @@ class QuestionCard extends Component {
       // this.updateScore(-this.state.question.score)
     }
     this.updateGameboard(this.state.question, clickedAnswer)
+    setTimeout(() => {
+      this.onCloseModal()
+    }, 1800)
   }
 
   isAnswered = (questionId) => {
