@@ -2,7 +2,7 @@ import apiUrl from '../apiConfig'
 import axios from 'axios'
 
 /* ~~~~~~~~~~~ GAMEBOARDS ~~~~~~~~~~~ */
-// create a new gameboard
+// POST a new gameboard - CREATE
 export const gameboardCreate = user => {
   return axios({
     url: apiUrl + '/gameboards',
@@ -11,7 +11,7 @@ export const gameboardCreate = user => {
   })
 }
 
-// update a gameboard
+// PATCH a gameboard - UPDATE
 export const gameboardUpdate = (id, gameboard, user) => {
   return axios({
     url: apiUrl + '/gameboards/' + id,
@@ -21,7 +21,7 @@ export const gameboardUpdate = (id, gameboard, user) => {
   })
 }
 
-// get all gameboards for user - INDEX
+// GET all gameboards for user - INDEX
 export const gameboardIndex = user => {
   return axios({
     url: apiUrl + '/gameboards',
@@ -30,6 +30,7 @@ export const gameboardIndex = user => {
   })
 }
 
+// GET a gameboard for user - SHOW
 export const gameboardShow = (id, user) => {
   return axios({
     url: apiUrl + '/gameboards/' + id,
