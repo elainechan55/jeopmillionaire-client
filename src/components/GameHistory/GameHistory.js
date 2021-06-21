@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 
-// import CategoryCard from '../CategoryCard/CategoryCard'
 import { gameboardIndex, gameboardDelete } from '../../api/gameboard'
 const _ = require('lodash')
 
@@ -16,12 +15,6 @@ class GameHistory extends Component {
 
   onGameClick = (event) => {
     const history = this.props.history
-    console.log('GameClickEvent', event)
-    // const gameboardToRedirectTo = this.state.gameboards.find(gameboard => gameboard._id === event.target.id)
-    // this.setState({
-    //   redirect: true,
-    //   gameboardToRedirectTo: gameboardToRedirectTo
-    // })
     history.push(`/gameboards/${event.currentTarget.id}`)
   }
 
@@ -51,26 +44,21 @@ class GameHistory extends Component {
   }
 
   componentDidMount () {
+    const { msgAlert } = this.props
     gameboardIndex(this.state.user) // axios request
       .then(res => {
         this.setState({
           gameboards: res.data.gameboards
         })
       })
-      .catch(err => console.error(err))
+      .catch(error => msgAlert({
+        heading: 'Failed to load game history. Error: ' + error.message,
+        message: 'Your game history could not load. Please try again.',
+        variant: 'danger'
+      }))
   }
 
-  // deleteGameboard
-
   render () {
-    // if (this.state.redirect) {
-    //   return (
-    //     <Redirect to={{
-    //       pathname: '/gameboards',
-    //       state: { gameboard: this.state.gameboardToRedirectTo }
-    //     }}/>
-    //   )
-    // }
     if (this.state.gameboards.length > 0) {
       return (
         <div className="row h-100 board">
@@ -80,7 +68,6 @@ class GameHistory extends Component {
                 .map(q => q.category)
             return (
               <div id={gameboard._id} key={gameboard._id} className="col-4 box">
-                {/* {gameboard.isOver ? 'Categories: ' + categories + ' Status: Complete' : 'Categories: ' + categories + ' Status: NOT complete'} */}
                 <ul>
                   <li>{'Categories: ' + categories}</li>
                   <li>{'Score: ' + gameboard.totalScore}</li>

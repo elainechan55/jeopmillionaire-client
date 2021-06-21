@@ -5,7 +5,6 @@ import { Modal } from 'react-responsive-modal'
 import AnswerCard from '../AnswerCard/AnswerCard'
 
 class QuestionCard extends Component {
-// const QuestionCard = props => {
   constructor (props) {
     super(props)
     this.state = {
@@ -15,13 +14,7 @@ class QuestionCard extends Component {
       gameboard: props.gameboard
     }
     this.updateGameboard = props.updateGameboard
-
-    // this.onOpenModal = this.onOpenModal.bind(this)
-    // this.onCloseModal = this.onCloseModal.bind(this)
-    // this.handleAnswerClick = this.handleAnswerClick.bind(this)
   }
-  // const [question] = useState(props.value)
-  // const [open, setOpen] = useState(false)
   onOpenModal = () => {
     if (!this.state.isAnswered) {
       this.setState({ open: true })
@@ -31,10 +24,6 @@ class QuestionCard extends Component {
   onCloseModal = () => {
     this.setState({ open: false })
   }
-  // const onOpenModal = () => setOpen(true)
-  // const onCloseModal = () => setOpen(false)
-
-  // const [isAnswered, setIsAnswered] = useState(false)
 
   handleAnswerClick = (event) => {
     if (this.state.isAnswered) {
@@ -42,15 +31,12 @@ class QuestionCard extends Component {
     }
     this.setState({ isAnswered: true })
 
-    console.log('event', event)
     const clickedAnswer = this.state.question.answers.find(answer => answer._id === event.target.id)
 
     if (clickedAnswer.isCorrect) {
       event.target.style.backgroundColor = 'green'
-      // this.updateScore(this.state.question.score)
     } else {
       event.target.style.backgroundColor = 'red'
-      // this.updateScore(-this.state.question.score)
     }
     this.updateGameboard(this.state.question, clickedAnswer)
     setTimeout(() => {
@@ -72,7 +58,6 @@ class QuestionCard extends Component {
         <Modal open={this.state.open} onClose={this.onCloseModal} center>
           <h2>{this.state.question.title}</h2>
           {this.state.question.answers.map(answer => (
-            // <h2 key="">{answer.answerText}</h2>
             <div key={answer.answerText}>
               <AnswerCard onClick={this.handleAnswerClick} value={answer}/>
             </div>
