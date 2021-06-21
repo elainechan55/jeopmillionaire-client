@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom'
 
 // import CategoryCard from '../CategoryCard/CategoryCard'
 import { gameboardIndex } from '../../api/gameboard'
+const _ = require('lodash')
 
 class GameHistory extends Component {
   constructor (props) {
@@ -21,11 +22,11 @@ class GameHistory extends Component {
     //   redirect: true,
     //   gameboardToRedirectTo: gameboardToRedirectTo
     // })
-    history.push(`/gameboards/${event.target.id}`)
+    history.push(`/gameboards/${event.currentTarget.id}`)
   }
 
   componentDidMount () {
-    gameboardIndex(this.state.user)
+    gameboardIndex(this.state.user) // axios request
       .then(res => {
         this.setState({
           gameboards: res.data.gameboards
@@ -33,6 +34,8 @@ class GameHistory extends Component {
       })
       .catch(err => console.error(err))
   }
+
+  // deleteGameboard
 
   render () {
     // if (this.state.redirect) {
@@ -45,10 +48,22 @@ class GameHistory extends Component {
     // }
     if (this.state.gameboards.length > 0) {
       return (
-        <div>
-          {this.state.gameboards.map(gameboard => (
-            <div id={gameboard._id} onClick={this.onGameClick} key={gameboard._id} className="col-4 box category">{gameboard.isOver ? gameboard._id + ' Complete' : gameboard._id + ' NOT complete'}</div>
-          ))}
+        <div className="row h-100 board">
+          {this.state.gameboards.map(gameboard => {
+            const categories =
+              _.uniqBy(gameboard.questions, 'category')
+                .map(q => q.category)
+            return (
+              <div id={gameboard._id} onClick={this.onGameClick} key={gameboard._id} className="col-4 box">
+                {/* {gameboard.isOver ? 'Categories: ' + categories + ' Status: Complete' : 'Categories: ' + categories + ' Status: NOT complete'} */}
+                <ul>
+                  <li>{'Categories: ' + categories}</li>
+                  <li>{'Score: ' + gameboard.totalScore}</li>
+                  <li>{gameboard.isOver ? 'Status: Complete' : 'Status: NOT complete'}</li>
+                </ul>
+              </div>
+            )
+          })}
         </div>
       )
     }

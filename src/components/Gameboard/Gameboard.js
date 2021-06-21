@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { gameboardCreate, gameboardUpdate, responseCreate, gameboardShow } from '../../api/gameboard'
 import CategoryCard from '../CategoryCard/CategoryCard'
 import QuestionCard from '../QuestionCard/QuestionCard'
@@ -20,7 +20,7 @@ class Gameboard extends Component {
     if (!this.state.gameboardId) {
       return
     }
-    gameboardShow(this.state.gameboardId, this.state.user)
+    gameboardShow(this.state.gameboardId, this.state.user) // axios request
       .then(res => {
         this.setState({
           gameboard: res.data.gameboard,
@@ -32,15 +32,12 @@ class Gameboard extends Component {
 
   onSubmit (event) {
     console.log(event)
-    // this.setState({
-    //   gameboard: null,
-    //   isLoaded: false
-    // })
     gameboardCreate(this.state.user) // axios request
       .then(res => {
         this.setState({
           isLoaded: true,
-          gameboard: res.data.gameboard
+          gameboard: res.data.gameboard,
+          gameboardId: res.data.gameboard._id
         })
         this.render()
       })
@@ -80,8 +77,17 @@ class Gameboard extends Component {
   }
 
   render () {
-    if (!this.state.isLoaded) {
-      return <button onClick={this.onSubmit}>New Game!</button>
+    if (!this.state.isLoaded || !this.state.gameboardId) {
+      // return <button id="newGameButton" onClick={this.onSubmit}>Start a Game!</button>
+      // this.onSubmit()
+      return (
+        <Fragment>
+          <div className="centered">
+            <div className="logo">JeopMillionaire!?</div>
+            <button className="homeButton" onClick={this.onSubmit}>Play a Game!</button>
+          </div>
+        </Fragment>
+      )
     } else if (this.state.gameboard.isOver) {
       return (
         <div>
@@ -94,7 +100,6 @@ class Gameboard extends Component {
       const categories =
         _.uniqBy(this.state.gameboard.questions, 'category')
           .map(q => q.category)
-      // const categories = this.state.gameboard.questions.map(q => q.category)
       return (
         <div className="game-board">
           <h1>Score: {this.state.gameboard.totalScore}</h1>
@@ -120,26 +125,5 @@ class Gameboard extends Component {
     }
   }
 }
-
-// class CreateGame extends Component {
-//   constructor (props) {
-//     super(props)
-//     this.state = {
-//       user: props.user
-//     }
-//   }
-//   onSubmit () {
-//     gameboardCreate(this.state.user)
-//       .then(gameboard => {
-
-//       })
-//   }
-
-//   render () {
-//     return (
-//         <Button onSubmit={this.onSubmit}/>
-//       )
-//   }
-// }
 
 export default Gameboard
