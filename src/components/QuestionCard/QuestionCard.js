@@ -56,12 +56,7 @@ class QuestionCard extends Component {
   }
 
   isAnswered = (questionId) => {
-    const result = this.state.gameboard.responses.some(response => {
-      if (response.question) {
-        return response.question[0] === questionId
-      }
-      return this.state.isAnswered
-    })
+    const result = this.state.gameboard.responses.some(response => response.question[0] === questionId || this.state.isAnswered)
     return result
   }
 
