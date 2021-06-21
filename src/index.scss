@@ -95,6 +95,8 @@
   display: table;
 }
 
+ /* ~~~~~~~~~~~~~~~~ FOR NAVBAR AT TOP OF PAGE ~~~~~~~~~~~~~~~~ */
+/* ~~~~ I don't know why, but it all needs to be separated ~~~~ */
 .primary {
   background-color: #060CE9;
   color: #ffd700 !important;
@@ -104,6 +106,17 @@
   background-color: #060CE9;
   color: #ffd700 !important;
 }
+
+.navbar-text {
+  background-color: #060CE9;
+  color: #ffd700 !important;
+}
+
+.dropdown-toggle {
+  background-color: #060CE9;
+  color: #ffd700 !important;
+}
+
 
 ul {
   list-style-type: none;
