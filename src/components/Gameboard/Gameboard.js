@@ -32,6 +32,11 @@ class Gameboard extends Component {
 
   onSubmit (event) {
     console.log(event)
+    const history = this.props.history
+    if (!this.state.user) {
+      history.push('sign-in')
+      return
+    }
     gameboardCreate(this.state.user) // axios request
       .then(res => {
         this.setState({
@@ -51,21 +56,21 @@ class Gameboard extends Component {
       question: question._id,
       correct: answer.isCorrect
     }
-    const gameboard = this.state.gameboard
+    const gameboardUpdateRequest = Object.create(this.state.gameboard)
     if (answer.isCorrect) {
-      gameboard.totalScore += question.score
+      gameboardUpdateRequest.totalScore += question.score
     } else {
-      gameboard.totalScore -= question.score
+      gameboardUpdateRequest.totalScore -= question.score
     }
 
     responseCreate(response, this.state.user) // axios request
       .then(res => {
-        gameboard.responses.push(res.data.response)
-        gameboard.responses = gameboard.responses.map(r => r._id)
-        if (gameboard.responses.length === gameboard.questions.length) {
-          gameboard.isOver = true
+        gameboardUpdateRequest.responses.push(res.data.response)
+        gameboardUpdateRequest.responses = gameboardUpdateRequest.responses.map(r => r._id)
+        if (gameboardUpdateRequest.responses.length === gameboardUpdateRequest.questions.length) {
+          gameboardUpdateRequest.isOver = true
         }
-        gameboardUpdate(gameboard._id, gameboard, this.state.user) // axios request
+        gameboardUpdate(gameboardUpdateRequest._id, gameboardUpdateRequest, this.state.user) // axios request
           .then(res => {
             this.setState({
               gameboard: res.data.gameboard

@@ -5,7 +5,7 @@ import { v4 as uuid } from 'uuid'
 import AuthenticatedRoute from './components/AuthenticatedRoute/AuthenticatedRoute'
 import AutoDismissAlert from './components/AutoDismissAlert/AutoDismissAlert'
 import Header from './components/Header/Header'
-import Home from './components/Home/Home'
+// import Home from './components/Home/Home'
 import SignUp from './components/SignUp/SignUp'
 import SignIn from './components/SignIn/SignIn'
 import SignOut from './components/SignOut/SignOut'
@@ -58,8 +58,9 @@ class App extends Component {
           />
         ))}
         <main className="container">
-          <Route exact path='/' render={() => (
-            <Home msgAlert={this.msgAlert} setUser={this.setUser} user={user} />
+          <Route exact path='/' render={(props) => (
+            /* <Home msgAlert={this.msgAlert} setUser={this.setUser} user={user} /> */
+            <Gameboard user={user} {...props} />
           )} />
           <Route path='/sign-up' render={() => (
             <SignUp msgAlert={this.msgAlert} setUser={this.setUser} />
@@ -73,14 +74,14 @@ class App extends Component {
           <AuthenticatedRoute user={user} path='/change-password' render={() => (
             <ChangePassword msgAlert={this.msgAlert} user={user} />
           )} />
-          <AuthenticatedRoute user={user} path='/gameboards' render={(props) => (
+          <AuthenticatedRoute user={user} exact path='/gameboards' render={(props) => (
             <Gameboard user={user} {...props}/>
           )} />
-          <AuthenticatedRoute user={user} path='/gameboards/:id' render={(props) => (
+          <AuthenticatedRoute user={user} exact path='/gameboards/:id' render={(props) => (
             <Gameboard user={user} {...props} />
           )} />
           <AuthenticatedRoute user={user} path='/game-history' render={() => (
-            <GameHistory user={user} />
+            <GameHistory msgAlert={this.msgAlert} user={user} />
           )} />
         </main>
       </Fragment>
