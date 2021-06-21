@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 
 // import CategoryCard from '../CategoryCard/CategoryCard'
-import { gameboardIndex } from '../../api/gameboard'
+import { gameboardIndex, gameboardDelete } from '../../api/gameboard'
 const _ = require('lodash')
 
 class GameHistory extends Component {
@@ -23,6 +23,31 @@ class GameHistory extends Component {
     //   gameboardToRedirectTo: gameboardToRedirectTo
     // })
     history.push(`/gameboards/${event.currentTarget.id}`)
+  }
+
+  onGameDelete= (event) => {
+    const id = event.currentTarget.id
+    const { msgAlert } = this.props
+    gameboardDelete(id, this.state.user)
+      .then(() => {
+        const updatedGameboards = this.state.gameboards.filter(gameboard => {
+          return gameboard._id !== id
+        })
+        this.setState({
+          gameboards: updatedGameboards
+        })
+        this.forceUpdate()
+      })
+      .then(() => msgAlert({
+        heading: 'Game deleted',
+        message: 'You have successfully deleted a game!',
+        variant: 'success'
+      }))
+      .catch(error => msgAlert({
+        heading: 'Failed to delete game. Error: ' + error.message,
+        message: 'Your game did not delete. Please try again.',
+        variant: 'danger'
+      }))
   }
 
   componentDidMount () {
@@ -54,13 +79,15 @@ class GameHistory extends Component {
               _.uniqBy(gameboard.questions, 'category')
                 .map(q => q.category)
             return (
-              <div id={gameboard._id} onClick={this.onGameClick} key={gameboard._id} className="col-4 box">
+              <div id={gameboard._id} key={gameboard._id} className="col-4 box">
                 {/* {gameboard.isOver ? 'Categories: ' + categories + ' Status: Complete' : 'Categories: ' + categories + ' Status: NOT complete'} */}
                 <ul>
                   <li>{'Categories: ' + categories}</li>
                   <li>{'Score: ' + gameboard.totalScore}</li>
                   <li>{gameboard.isOver ? 'Status: Complete' : 'Status: NOT complete'}</li>
                 </ul>
+                <button id={gameboard._id} onClick={this.onGameClick}>Resume Game</button>
+                <button id={gameboard._id} onClick={this.onGameDelete}>Delete Game</button>
               </div>
             )
           })}

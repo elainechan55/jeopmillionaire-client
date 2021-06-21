@@ -39,6 +39,15 @@ export const gameboardShow = (id, user) => {
   })
 }
 
+// DELETE a gameboard - DESTROY
+export const gameboardDelete = (id, user) => {
+  return axios({
+    url: apiUrl + '/gameboards/' + id,
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${user.token}` }
+  })
+}
+
 /* ~~~~~~~~~~~ RESPONSES ~~~~~~~~~~~ */
 export const responseCreate = (response, user) => {
   return axios({
