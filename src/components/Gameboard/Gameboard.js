@@ -20,6 +20,7 @@ class Gameboard extends Component {
     if (!this.state.gameboardId) {
       return
     }
+    const { msgAlert } = this.props
     gameboardShow(this.state.gameboardId, this.state.user) // axios request
       .then(res => {
         this.setState({
@@ -27,16 +28,20 @@ class Gameboard extends Component {
           isLoaded: true
         })
       })
-      .catch(err => console.error(err))
+      .catch(error => msgAlert({
+        heading: 'Failed to load gameboard. Error: ' + error.message,
+        message: 'Sorry, your gameboard could not load. Please try again.',
+        variant: 'danger'
+      }))
   }
 
   onSubmit (event) {
-    console.log(event)
     const history = this.props.history
     if (!this.state.user) {
       history.push('sign-in')
       return
     }
+    const { msgAlert } = this.props
     gameboardCreate(this.state.user) // axios request
       .then(res => {
         this.setState({
@@ -46,7 +51,11 @@ class Gameboard extends Component {
         })
         this.render()
       })
-      .catch(err => console.error(err))
+      .catch(error => msgAlert({
+        heading: 'Failed to create gameboard. Error: ' + error.message,
+        message: 'Sorry, your gameboard could not be created. Please try again.',
+        variant: 'danger'
+      }))
   }
 
   updateGameboard = (question, answer) => {
@@ -63,6 +72,7 @@ class Gameboard extends Component {
       gameboardUpdateRequest.totalScore -= question.score
     }
 
+    const { msgAlert } = this.props
     responseCreate(response, this.state.user) // axios request
       .then(res => {
         gameboardUpdateRequest.responses.push(res.data.response)
@@ -76,15 +86,21 @@ class Gameboard extends Component {
               gameboard: res.data.gameboard
             })
           })
-          .catch(err => console.error(err))
+          .catch(error => msgAlert({
+            heading: 'Failed to update gameboard. Error: ' + error.message,
+            message: 'Your gameboard could not be updated. Please try again.',
+            variant: 'danger'
+          }))
       })
-      .catch(err => console.error(err))
+      .catch(error => msgAlert({
+        heading: 'Failed to create a response. Error: ' + error.message,
+        message: 'Please try again.',
+        variant: 'danger'
+      }))
   }
 
   render () {
     if (!this.state.isLoaded || !this.state.gameboardId) {
-      // return <button id="newGameButton" onClick={this.onSubmit}>Start a Game!</button>
-      // this.onSubmit()
       return (
         <Fragment>
           <div className="centered">
